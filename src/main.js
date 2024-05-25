@@ -50,7 +50,6 @@ const level1 = addLevel([
 ], {
 	tileWidth: 75,
 	tileHeight: 75,
-	pos: vec2((width() - 75 * 10) / 2, (height() - 75 * 10) / 2),
 	tiles: {
 		"w": () => [
 			sprite("wall"),
@@ -73,15 +72,13 @@ const level1 = addLevel([
 
 const player = level1.spawn([
 	"player",
-	sprite("player"),
+	sprite("player", { anim: "idle" }),
 	anchor("center"),
 	tile(),
 	body(),
 	area({ shape: new Rect(vec2(0, 0), 40, 90) }),
 	z(1),
 ], 2, 2);
-
-player.play("idle");
 
 onKeyDown("w", () => {
 	player.move(0, -SPEED);
@@ -101,13 +98,14 @@ onKeyDown("d", () => {
 	player.flipX = false;
 });
 
-// Hit animation
+// Swing
 
 const swing = player.add([
 	"swing",
 	sprite("swing"),
 	area({ shape: new Rect(vec2(16, 16), 40, 80) }),
 	rotate(270),
+	pos(0, 32),
 ]);
 
 swing.play("idle");
@@ -138,3 +136,15 @@ const enemy = level1.spawn([
 ]);
 
 enemy.flipX = true;
+
+// Camera
+
+player.onUpdate(() => {
+	camPos(player.pos);
+});
+
+player.onPhysicsResolve(() => {
+	camPos(player.pos);
+});
+
+debug.inspect = true;
