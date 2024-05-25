@@ -2,6 +2,8 @@ import kaboom from "kaboom";
 
 kaboom();
 
+// Sprites
+
 loadSprite("floor", "sprites/floor.png");
 loadSprite("wall", "sprites/wall.png");
 loadSprite("player", "sprites/player.png", {
@@ -15,16 +17,32 @@ loadSprite("player", "sprites/player.png", {
 		}
 	}
 });
+loadSprite("swing", "sprites/swing.png", {
+	sliceX: 8,
+	anims: {
+		"idle": 7,
+		"attack": {
+			from: 0,
+			to: 6,
+			speed: 12,
+		}
+	}
+});
+loadSprite("enemy", "sprites/ogre.png");
+
+// Constants
 
 const SPEED = 260;
+
+// Levels
 
 const level1 = addLevel([
 	"wwwwwwwwww",
 	"w        w",
 	"w        w",
-	"w        w",
-	"w        w",
-	"w        w",
+	"w    w   w",
+	"w    w   w",
+	"w    w   w",
 	"w        w",
 	"w        w",
 	"w        w",
@@ -50,6 +68,8 @@ const level1 = addLevel([
 		],
 	}
 });
+
+// Player
 
 const player = level1.spawn([
 	"player",
@@ -80,3 +100,41 @@ onKeyDown("d", () => {
 	player.move(SPEED, 0);
 	player.flipX = false;
 });
+
+// Hit animation
+
+const swing = player.add([
+	"swing",
+	sprite("swing"),
+	area({ shape: new Rect(vec2(16, 16), 40, 80) }),
+	rotate(270),
+]);
+
+swing.play("idle");
+
+onKeyDown("space", () => {
+	if (swing.curAnim() !== "attack") {
+		swing.play("attack");
+	}
+});
+
+onKeyRelease("space", () => {
+	swing.play("idle");
+});
+
+onCollideUpdate("swing", "enemy", () => {
+	if (swing.curAnim() === "attack") {
+		enemy.destroy();
+	}
+});
+
+// Enemies
+
+const enemy = add([
+	"enemy",
+	sprite("enemy"),
+	pos(600, 600),
+	area()
+]);
+
+enemy.flipX = true;
