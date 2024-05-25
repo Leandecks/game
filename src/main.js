@@ -130,10 +130,10 @@ onCollideUpdate("swing", "enemy", () => {
 
 // Enemies
 
-const enemy = add([
+const enemy = level1.spawn([
 	"enemy",
 	sprite("enemy"),
-	pos(600, 600),
+	pos(525, 525),
 	area()
 ]);
 
