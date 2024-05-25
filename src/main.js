@@ -4,7 +4,17 @@ kaboom();
 
 loadSprite("floor", "sprites/floor.png");
 loadSprite("wall", "sprites/wall.png");
-loadSprite("knight", "sprites/knight.png");
+loadSprite("player", "sprites/player.png", {
+	sliceX: 12,
+	anims: {
+		"idle": {
+			from: 0,
+			to: 11,
+			speed: 8,
+			loop: true,
+		}
+	}
+});
 
 const SPEED = 260;
 
@@ -30,49 +40,43 @@ const level1 = addLevel([
 			scale(.75),
 			body({ isStatic: true }),
 			tile({ isObstacle: true }),
+			z(2),
 		],
 		" ": () => [
 			sprite("floor"),
 			scale(.75),
 			tile({ isObstacle: false }),
+			z(0),
 		],
 	}
 });
 
-const knight = level1.spawn([
-	"knight",
-	sprite("knight"),
-	scale(3.5),
+const player = level1.spawn([
+	"player",
+	sprite("player"),
 	anchor("center"),
 	tile(),
 	body(),
-	area({ shape: new Rect(vec2(0, 6), 12, 12) }),
+	area({ shape: new Rect(vec2(0, 0), 40, 90) }),
+	z(1),
 ], 2, 2);
 
+player.play("idle");
+
 onKeyDown("w", () => {
-	knight.move(0, -SPEED);
-	knight.flipX = false;
+	player.move(0, -SPEED);
 });
 
 onKeyDown("a", () => {
-	knight.move(-SPEED, 0);
-	knight.flipX = true;
+	player.move(-SPEED, 0);
+	player.flipX = true;
 });
 
 onKeyDown("s", () => {
-	knight.move(0, SPEED);
-	knight.flipX = true;
+	player.move(0, SPEED);
 });
 
 onKeyDown("d", () => {
-	knight.move(SPEED, 0);
-	knight.flipX = false;
-});
-
-onUpdate("knight", (knight) => {
-	if (knight.pos.x < 75) {
-		knight.pos.x = 75;
-	} else if (knight.pos.x > 675) {
-		knight.pos.x = 675
-	}
+	player.move(SPEED, 0);
+	player.flipX = false;
 });
