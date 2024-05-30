@@ -33,6 +33,8 @@ loadSprite("enemy", "sprites/ogre.png");
 // Constants
 
 const SPEED = 260;
+const ENEMY_SPEED = 160;
+const ENEMY_DAMAGE = 40;
 
 // Levels
 
@@ -78,6 +80,7 @@ const player = level1.spawn([
 	body(),
 	area({ shape: new Rect(vec2(0, 0), 40, 90) }),
 	z(1),
+	health(100),
 ], 2, 2);
 
 onKeyDown("w", () => {
@@ -96,6 +99,18 @@ onKeyDown("s", () => {
 onKeyDown("d", () => {
 	player.move(SPEED, 0);
 	player.flipX = false;
+});
+
+player.on("death", () => {
+	destroy(player);
+});
+
+const playerHealth = add([
+	text(`Health: ${player.hp()}`),
+]);
+
+onUpdate("player", () => {
+	playerHealth.text = player.hp();
 });
 
 // Swing
@@ -132,10 +147,21 @@ const enemy = level1.spawn([
 	"enemy",
 	sprite("enemy"),
 	pos(525, 525),
-	area()
+	area(),
 ]);
 
 enemy.flipX = true;
+
+onUpdate(() => {
+	if (player.exists()) {
+		const dir = player.pos.sub(enemy.pos).unit();
+		enemy.move(dir.scale(ENEMY_SPEED))
+	}
+});
+
+onCollideUpdate("player", "enemy", () => {
+	player.hurt();
+});
 
 // Camera
 
@@ -146,5 +172,3 @@ player.onUpdate(() => {
 player.onPhysicsResolve(() => {
 	camPos(player.pos);
 });
-
-debug.inspect = true;
