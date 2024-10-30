@@ -9,14 +9,18 @@ const config = {
     preload: preload,
     create: create,
   },
+  physics: {
+    default: "arcade",
+  },
 };
 
 const game = new Game(config);
 
 function preload() {
   this.load.setPath("assets");
-  this.load.image("floor", "floor2.png");
-  this.load.image("wall", "wall2.png");
+  this.load.image("floor", "floor.png");
+  this.load.image("wall", "wall.png");
+  this.load.atlas("player", "player.png", "player.json");
 }
 
 function create() {
@@ -44,4 +48,41 @@ function create() {
       });
     }
   }
+
+  const player = this.add.sprite(100, 100, "player", 0);
+
+  player.anims.create({
+    key: "idle",
+    frames: this.anims.generateFrameNames("player", {
+      prefix: "idle",
+      start: 1,
+      end: 12,
+    }),
+    frameRate: 12,
+    repeat: -1,
+  });
+
+  player.anims.create({
+    key: "walk",
+    frames: this.anims.generateFrameNames("player", {
+      prefix: "walk",
+      start: 1,
+      end: 9,
+    }),
+    frameRate: 12,
+    repeat: -1,
+  });
+
+  player.anims.create({
+    key: "attack",
+    frames: this.anims.generateFrameNames("player", {
+      prefix: "attack",
+      start: 1,
+      end: 16,
+    }),
+    frameRate: 12,
+    repeat: -1,
+  });
+
+  player.play("idle");
 }
