@@ -7,7 +7,6 @@ class Player extends Phaser.GameObjects.Sprite {
     this.createAnimations(this);
     this.anims.play("idle", true);
     this.body.setCollideWorldBounds(true);
-    this.body.setVelocity(0);
 
     this.keyObjects = scene.input.keyboard.addKeys({
       up: "W",
@@ -53,10 +52,10 @@ class Player extends Phaser.GameObjects.Sprite {
     });
   }
 
-  update(...args) {
-    super.update(...args);
-
+  update() {
     // Movement
+
+    this.body.setVelocity(0);
 
     if (this.keyObjects.left.isDown) {
       this.body.setVelocityX(-100);

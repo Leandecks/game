@@ -57,7 +57,6 @@ function create() {
 
   // Player
 
-  // this.player = this.physics.add.sprite(100, 100, "player", 0);
   this.player = new Player(this, 100, 100, 0);
 }
 
