@@ -1,14 +1,15 @@
 class Player extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
-    scene.physics.add.existing(this);
+    scene.add.existing(this);
+    scene.physics.world.enable(this);
 
     this.createAnimations(this);
-    this.play("idle", true);
-    this.setCollideWorldBounds(true);
+    this.anims.play("idle", true);
+    this.body.setCollideWorldBounds(true);
     this.body.setVelocity(0);
 
-    this.keyObjects = this.input.keyboard.addKeys({
+    this.keyObjects = scene.input.keyboard.addKeys({
       up: "W",
       down: "S",
       left: "A",
@@ -71,21 +72,21 @@ class Player extends Phaser.GameObjects.Sprite {
     // Animations
 
     if (this.keyObjects.left.isDown) {
-      this.play("walk", true);
+      this.anims.play("walk", true);
       this.flipX = true;
     } else if (this.keyObjects.right.isDown) {
-      this.play("walk", true);
+      this.anims.play("walk", true);
       this.flipX = false;
     } else if (this.keyObjects.up.isDown) {
-      this.play("walk", true);
+      this.anims.play("walk", true);
       this.flipX = false;
     } else if (this.keyObjects.down.isDown) {
-      this.play("walk", true);
+      this.anims.play("walk", true);
       this.flipX = true;
     } else if (this.keyObjects.attack.isDown) {
-      this.play("attack", true);
+      this.anims.play("attack", true);
     } else {
-      this.play("idle", true);
+      this.anims.play("idle", true);
     }
   }
 }
