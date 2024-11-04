@@ -7,7 +7,6 @@ const config = {
   height: 750,
   parent: "game-container",
   scene: {
-    preload: preload,
     create: create,
     update: update,
   },
@@ -17,13 +16,6 @@ const config = {
 };
 
 const game = new Game(config);
-
-function preload() {
-  this.load.setPath("assets");
-  this.load.image("floor", "floor.png");
-  this.load.image("wall", "wall.png");
-  this.load.atlas("player", "player.png", "player.json");
-}
 
 function create() {
   // World generation
