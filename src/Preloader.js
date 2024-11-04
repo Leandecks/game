@@ -1,6 +1,6 @@
 class Preloader extends Phaser.Scene {
   constructor() {
-    super("Preloader");
+    super({ key: "Preloader" });
   }
 
   preload() {
@@ -8,6 +8,10 @@ class Preloader extends Phaser.Scene {
     this.load.image("floor", "floor.png");
     this.load.image("wall", "wall.png");
     this.load.atlas("player", "player.png", "player.json");
+  }
+
+  create() {
+    this.scene.start("Play");
   }
 }
 
